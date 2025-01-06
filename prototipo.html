@@ -1,0 +1,252 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Vehículos</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        #app {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        header {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: normal;
+        }
+        #main {
+            display: flex;
+            flex: 1;
+        }
+        .sidebar {
+            width: 220px;
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Space for profile and buttons */
+            overflow-y: auto;
+        }
+        .profile {
+            width: 100px;
+            height: 100px;
+            background-color: #ecf0f1;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+            color: #2c3e50;
+            margin-bottom: 20px; /* Space between profile and buttons */
+            align-self: center;
+        }
+        .sidebar button {
+            background: #2c3e50;
+            border: none;
+            color: white;
+            padding: 8px 10px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 13px;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+        .sidebar button:hover {
+            background: #1abc9c;
+        }
+        .content {
+            flex: 1;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        form input, form button, form textarea {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        form button {
+            background-color: #2c3e50;
+            color: white;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #1abc9c;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Sistema de Gestión</h1>
+        </header>
+        <div id="main">
+            <div class="sidebar">
+                <!-- Foto de perfil en la parte superior, separada de los botones -->
+                <div class="profile">👤</div>
+                <button onclick="showSection('inventory')">📦 Inventario</button>
+                <button onclick="showSection('clients')">👥 Clientes</button>
+                <button onclick="showSection('appointments')">📅 Citas</button>
+                <button onclick="showSection('reports')">📊 Reportes</button>
+            </div>
+            <div class="content">
+                <div id="inventory" class="section active">
+                    <h2>Inventario de Vehículos</h2>
+                    <form id="inventoryForm">
+                        <input type="text" id="vehicleName" placeholder="Nombre del Vehículo" required>
+                        <input type="text" id="vehicleModel" placeholder="Modelo" required>
+                        <textarea id="vehicleDetails" placeholder="Detalles del Vehículo"></textarea>
+                        <button type="button" onclick="addItem('vehicleTable', 'inventoryForm')">Agregar Vehículo</button>
+                    </form>
+                    <table id="vehicleTable">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Modelo</th>
+                                <th>Detalles</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="clients" class="section">
+                    <h2>Clientes</h2>
+                    <form id="clientForm">
+                        <input type="text" id="clientName" placeholder="Nombre del Cliente" required>
+                        <input type="email" id="clientEmail" placeholder="Correo Electrónico" required>
+                        <textarea id="clientDetails" placeholder="Notas del Cliente"></textarea>
+                        <button type="button" onclick="addItem('clientTable', 'clientForm')">Agregar Cliente</button>
+                    </form>
+                    <table id="clientTable">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Notas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="appointments" class="section">
+                    <h2>Citas</h2>
+                    <form id="appointmentForm">
+                        <input type="text" id="appointmentClient" placeholder="Cliente" required>
+                        <input type="date" id="appointmentDate" required>
+                        <textarea id="appointmentDetails" placeholder="Detalles de la Cita"></textarea>
+                        <button type="button" onclick="addItem('appointmentTable', 'appointmentForm')">Agregar Cita</button>
+                    </form>
+                    <table id="appointmentTable">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Detalles</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="reports" class="section">
+                    <h2>Reportes</h2>
+                    <form id="reportForm">
+                        <input type="text" id="reportTitle" placeholder="Título del Reporte" required>
+                        <textarea id="reportContent" placeholder="Contenido del Reporte"></textarea>
+                        <button type="button" onclick="addItem('reportTable', 'reportForm')">Agregar Reporte</button>
+                    </form>
+                    <table id="reportTable">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Contenido</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function addItem(tableId, formId) {
+            const table = document.getElementById(tableId).querySelector('tbody');
+            const inputs = document.querySelectorAll(`#${formId} input, #${formId} textarea`);
+            const row = document.createElement('tr');
+            inputs.forEach(input => {
+                const cell = document.createElement('td');
+                cell.textContent = input.value;
+                row.appendChild(cell);
+                input.value = '';  // Clear input fields
+            });
+            const actionsCell = document.createElement('td');
+            actionsCell.innerHTML = '<button onclick="deleteRow(this)">Eliminar</button>';
+            row.appendChild(actionsCell);
+            table.appendChild(row);
+        }
+
+        function deleteRow(button) {
+            button.parentElement.parentElement.remove();
+        }
+    </script>
+</body>
+</html>
